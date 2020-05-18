@@ -1,6 +1,6 @@
-######   https://search.google.com/local/reviews?placeid=ChIJI-_g-cDlDDkRRRf6NOBqV_E                   school
-######   https://search.google.com/local/reviews?placeid=ChIJlSobTU_kDDkRvu2PW0G--4I      moi
-######    https://search.google.com/local/reviews?placeid=ChIJm-5b4FBIbDkRY7hOLUBnjRs         muj
+######   https://search.google.com/local/reviews?placeid=ChIJI-_g-cDlDDkRRRf6NOBqV_E             
+######   https://search.google.com/local/reviews?placeid=ChIJlSobTU_kDDkRvu2PW0G--4I
+######    https://search.google.com/local/reviews?placeid=ChIJm-5b4FBIbDkRY7hOLUBnjRs
 import urllib.request, urllib.parse, urllib.error
 import http
 import sqlite3
