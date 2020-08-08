@@ -65,7 +65,7 @@ while(True):
         print('Retrieved 5 locations, restart to retrieve more')
         break
     ## Taking the place input from the user for which the reviews are to be founded
-    place=input('Enter Location:\n (To exit, Enter N)')
+    place=input("(To exit, Enter 'n')\nEnter Location: ")
     if(place=='n'):
         break
 
@@ -112,9 +112,8 @@ while(True):
     ## Using Selenium and Chromedriver to extract the specific review category to scrape
     #################################
     wait = WebDriverWait(browser, 10)
-    menu_bt = wait.until(EC.element_to_be_clickable(
-                           (By.XPATH, '//g-dropdown-button[@class=\'dkSGpd NkCsjc\']'))
-                       )
+    menu_bt = wait.until(EC.element_to_be_clickable((By.XPATH, '//g-dropdown-button[@class=\'dkSGpd NkCsjc\']')))
+
     menu_bt.click()
 
     recent_rating_bt=browser.find_element_by_xpath("//g-menu[@role='menu']//div[@class='znKVS'][text()='Newest']")
@@ -126,23 +125,23 @@ while(True):
     ## Parsing and storing text using the Beautiful Soup library
     soup=BeautifulSoup(browser.page_source, "html.parser")
 
-    rlist = soup.find_all('div',{'jscontroller': "dWcZn"})
+    rlist = soup.find_all('div',{'jscontroller': "e6Mltc"})# earlier - dWcZn
 
     for r in rlist:
 
-        r1=r('div', {"class": "jxjCjc"})
+        r1=r('div', {"class": "jxjCjc"}) ## Corresponds to a particular customer review
 
-        r2=r1[0].find('div', {"class": 'TSUbDb'})
+        r2=r1[0].find('div', {"class": 'TSUbDb'}) ## Name
         r4=r2.find('a')
         personname=r4.string
 
-        r3=r1[0].find('div', {"class": 'Jtu6Td'})
+        r3=r1[0].find('div', {"class": 'Jtu6Td'}) ## Review text
         r5=r3.find('span')
         personreview=r5.text
         if(len(personreview)<1):
             personreview='-Review without comments-' ## Blank Review
 
-        r6=r1[0].find('div',{'class': 'PuaHbe'})
+        r6=r1[0].find('div',{'class': 'PuaHbe'}) ## Rating Stars
         personrating=r6.span['aria-label']
 
         cur.execute('''INSERT INTO Reviews (placeid, name, review, rating)
