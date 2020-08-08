@@ -22,7 +22,7 @@ Enter Location: Mall of India, Noida
 ```
 - Provided you installed the appropriate chromedriver [version](https://chromedriver.chromium.org/downloads), a seperate chrome window should open as follows:
 
- ![Chrome Window](https://github.com/ishijo/Reviews-based-on-place-ids/blob/master/google-review-scrape/Extra/imgs/chromedriver_window.png)
+ ![Chrome Window](https://github.com/ishijo/Reviews-based-on-place-ids/blob/master/Extra/imgs/chromedriver_window.png)
 - Scroll through as many reviews as required. (Scrolling is necessary for extraction)
 - The 'greviewdb.sqlite' will store all the reviews and corresponding info.  
 
