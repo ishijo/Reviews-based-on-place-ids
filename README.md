@@ -25,10 +25,8 @@ Enter Location: Mall of India, Noida
 - Scroll through as many reviews as required. (Scrolling is necessary for extraction)
 - The 'greviewdb.sqlite' will store all the reviews and corresponding info.  
 
-<img src="google-review-scrape/Extra/imgs/database_structure.png" alt="Structure of Database">
-<img src="google-review-scrape/Extra/imgs/stored_data.png" alt="Stored data reviews">
- [//]: <>! [Structure of Database](Extra/imgs/database_structure.png)  
- [//]: <>! [Stored data reviews](google-review-scrape/Extra/imgs/stored_data.png)
+ [Structure of Database](../../google-review-scrape/Extra/imgs/database_structure.png)  
+ [Stored data reviews](../../google-review-scrape/Extra/imgs/stored_data.png)
 
 Note: The sqlite file won't retain any reviews after the next run of the script. In order change this, edit (see 'greview.py'):
 ```
