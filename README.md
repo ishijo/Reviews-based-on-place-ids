@@ -27,7 +27,7 @@ Enter Location: Mall of India, Noida
 
 <img src="google-review-scrape/Extra/imgs/database_structure.png" alt="Structure of Database">
 <img src="google-review-scrape/Extra/imgs/stored_data.png" alt="Stored data reviews">
- [//]: <>! [Structure of Database](google-review-scrape/Extra/imgs/database_structure.png)  
+ [//]: <>! [Structure of Database](Extra/imgs/database_structure.png)  
  [//]: <>! [Stored data reviews](google-review-scrape/Extra/imgs/stored_data.png)
 
 Note: The sqlite file won't retain any reviews after the next run of the script. In order change this, edit (see 'greview.py'):
