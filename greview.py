@@ -1,6 +1,3 @@
-######   https://search.google.com/local/reviews?placeid=ChIJI-_g-cDlDDkRRRf6NOBqV_E             
-######   https://search.google.com/local/reviews?placeid=ChIJlSobTU_kDDkRvu2PW0G--4I
-######    https://search.google.com/local/reviews?placeid=ChIJm-5b4FBIbDkRY7hOLUBnjRs
 import urllib.request, urllib.parse, urllib.error
 import http
 import sqlite3
@@ -8,7 +5,6 @@ import json
 import ssl
 from bs4 import BeautifulSoup
 import requests
-
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -18,30 +14,14 @@ from selenium.webdriver.chrome.options import Options
 import time
 from time import sleep
 
-# chrome_options = Options()
-# #chrome_options.add_argument("--lang=en")
-# chrome_options.add_argument("--disable-extensions")
-# browser = webdriver.Chrome(chrome_options=chrome_options)
 cdpath='/Users/ishikajohari/Desktop/Projects/google-review-scrape/chromedriver'
 
-## https://search.google.com/local/writereview?placeid=<place_id>
-## https://maps.googleapis.com/maps/api/place/details/json?placeid={place_id}&key={api_key}
-## ChIJlSobTU_kDDkRvu2PW0G--4I      -MOI
-## ChIJI-_g-cDlDDkRRRf6NOBqV_E       -School
-###### https://search.google.com/local/reviews?placeid=
-    ## l-> https://search.google.com/local/reviews?placeid=ChIJW7aB9gX5DogRXcljbEdemXE
+api_key = # Your API Key goes here
+## (Of the form -> 'AIzaSy___IDByT70')
 
-
-## https://www.google.com/maps/@28.567339,77.3189626,17z/data=!3m1!4b1
-
-
-api_key = False
-# If you have a Google Places API key, enter it here
-# api_key = 'AIzaSy___IDByT70'
-
-if api_key is False:
-    api_key =
-    serviceurl = ""
+if api_key is False: # Ignore (Was relevant while writing the code.)
+    api_key = #hidden
+    serviceurl = #hidden
 else :
     serviceurl = "https://maps.googleapis.com/maps/api/geocode/json?"
 
@@ -50,7 +30,7 @@ ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
-
+## Connecting to SQLite and creating tables while deleting existing info. (from previous runs of this code)
 ###################################################
 conn = sqlite3.connect('greviewdb.sqlite')
 cur = conn.cursor()
@@ -72,28 +52,34 @@ CREATE TABLE Places (
     name    TEXT
 );
 
-''') ### THINK ABOUT IT
-
-
+''')
 ###################################################
+
+## Will be used later.  (Link to reach the google reviews for the specific place we take as input via the Place-ID)
 placeidlink="https://search.google.com/local/reviews?placeid="
+
 count=0
+
 while(True):
     if(count>5):
         print('Retrieved 5 locations, restart to retrieve more')
         break
+    ## Taking the place input from the user for which the reviews are to be founded
     place=input('Enter Location:\n (To exit, Enter N)')
     if(place=='n'):
         break
-    ### then should store all reviews in the database
 
     parms = dict()
     parms["address"] = place
     if api_key is not False: parms['key'] = api_key
-    url = serviceurl + urllib.parse.urlencode(parms)   # SAME AS - http://py4e-data.dr-chuck.net/json?address=Mall+of+india+noida&key=42
+
+    ## Of the form -> https://maps.googleapis.com/maps/api/place/details/json?placeid={place_id}&key={api_key}
+    url = serviceurl + urllib.parse.urlencode(parms)
 
     print('Retrieving', url)
-    uh = urllib.request.urlopen(url, context=ctx) ##
+    uh = urllib.request.urlopen(url, context=ctx)
+
+    ## Storing retrieved place information in JSON file (in order to extract PlaceID later)
     data = uh.read().decode()
     print('Retrieved', len(data), 'characters')
     count+=1
@@ -108,69 +94,39 @@ while(True):
         print(data)
         continue
 
-    #print(json.dumps(js, indent=4),end='\n\n')
+    ## To extract the Place-ID (stored in 'pid' here) of the input Place from the JSON file
     pid=js['results'][0]['place_id']
-    #print("PLACE ID:  ",pid)
 
+    ## Store the corresponding retrieved information.
     cur.execute('''INSERT INTO Places (placeid, name)
             VALUES ( ?, ? )''', (memoryview(pid.encode()), memoryview(place.encode()) ) )
-    # cur.execute('''INSERT INTO Reviews (placeid)
-    #         VALUES ( ? )''', (memoryview(pid.encode()),)  )
 
-    conn.commit() # most imp --> its important to be inside the loop to prevent loss of data with each loop cycle
-
+    conn.commit() ## Most imp --> its important for this to be inside the loop to prevent loss of data with each loop cycle.
 
     placeidurl=placeidlink+pid   # U R L here      <---------
     print('Opening url...')
 
-
     browser= webdriver.Chrome(cdpath)        ##TO OPEN IN A CHROME TAB
-    browser.get(placeidurl)                        ## ''
+    browser.get(placeidurl)
 
-
-
+    ## Using Selenium and Chromedriver to extract the specific review category to scrape
     #################################
     wait = WebDriverWait(browser, 10)
     menu_bt = wait.until(EC.element_to_be_clickable(
                            (By.XPATH, '//g-dropdown-button[@class=\'dkSGpd NkCsjc\']'))
                        )
     menu_bt.click()
-    # recent_rating_bt = browser.find_elements_by_xpath(
-    #                                      '//g-menu[@role=\'menuitemradio\']')#zPXzie;;BRDJ7w     INITIAL
-
-    # recent_rating_bt = browser.find_elements_by_xpath('//g-menu[@role=\'menuitemradio\']')
-    # recent_rating_bt_2=recent_rating_bt.find_elements_by_xpath('//div[@class='znKVS' and .='Newest']')    #FIRST
 
     recent_rating_bt=browser.find_element_by_xpath("//g-menu[@role='menu']//div[@class='znKVS'][text()='Newest']")
-
-    # recent_rating_bt_1=browser.find_elements_by_xpath('//g-menu')
-    # recent_rating_bt = recent_rating_bt_1.find_elements_by_xpath('//g-menu-item[@role=\'menuitemradio\']')
-    # recent_rating_bt_2=recent_rating_bt.find_elements_by_xpath('//div[@class='znKVS' and .='Newest']')       #SECOND
-
-
-
-                                         #["//*[text()='Newest']"]
-                                         # '//div[@role='menuitem' and .='text']' this one
-                                         #'//g-menu[@role=\'menuitemradio\']'
 
     recent_rating_bt.click()
     time.sleep(5)
     #################################
 
-
-    #bsurl=requests.get(placeidurl)
-
-    #soupurl=urllib.request.urlopen(placeidurl)
+    ## Parsing and storing text using the Beautiful Soup library
     soup=BeautifulSoup(browser.page_source, "html.parser")
 
     rlist = soup.find_all('div',{'jscontroller': "dWcZn"})
-    # rlist=soup.find_all('div',{"class": "WMbnJf gws-localreviews__google-review"})# whole orange box class="WMbnJf gws-localreviews__google-review <REVIEW ID GOES HERE>
-    #class="WMbnJf gws-localreviews__google-review r-if173jOLKpxA"
-
-    print('I REACHED HERE') ##
-
-    print('rlist length: ', len(rlist)) ##
-    print('\n','rlist type: ',type(rlist),'\n\n') ##
 
     for r in rlist:
 
@@ -184,7 +140,7 @@ while(True):
         r5=r3.find('span')
         personreview=r5.text
         if(len(personreview)<1):
-            personreview='-Review without comments-'#Blank Review
+            personreview='-Review without comments-' ## Blank Review
 
         r6=r1[0].find('div',{'class': 'PuaHbe'})
         personrating=r6.span['aria-label']
