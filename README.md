@@ -10,7 +10,7 @@
 - ##### [Beautiful Soup library](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 
 ## Walkthrough
-- Navigate to the Project directory and run the 'greview.py' script from your Terminal.
+- Navigate to the Project directory and run the `greview.py` script.
 ```
 python greview.py
 ```
