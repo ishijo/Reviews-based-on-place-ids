@@ -10,7 +10,7 @@
 - ##### [Beautiful Soup library](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 
 ## Walkthrough
-- Navigate to the Project directory and run the 'greview.py' from your Terminal.
+- Navigate to the Project directory and run the 'greview.py' script from your Terminal.
 ```
 python greview.py
 ```
@@ -27,10 +27,15 @@ Enter Location: Mall of India, Noida
 - The 'greviewdb.sqlite' will store all the reviews and corresponding info.  
 
  ![Structure of Database](https://github.com/ishijo/Reviews-based-on-place-ids/blob/master/Extra/imgs/database_structure.png)  
+
  ![Stored data reviews](https://github.com/ishijo/Reviews-based-on-place-ids/blob/master/Extra/imgs/stored_data.png)
 
-Note: The sqlite file won't retain any reviews after the next run of the script. In order change this, edit (see 'greview.py'):
-```
-DROP TABLE IF EXISTS Reviews;
-DROP TABLE IF EXISTS places;
-```
+ Note: The sqlite file won't retain any reviews after the next run of the script. In order change this, edit (see 'greview.py'):
+ ```
+ DROP TABLE IF EXISTS Reviews;
+ DROP TABLE IF EXISTS places;
+ ```
+ ---
+
+## **Analysis**
+- Run the `ganalyse.py` script.
